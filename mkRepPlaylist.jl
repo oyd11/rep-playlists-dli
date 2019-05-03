@@ -6,15 +6,20 @@
 
 
 # Julia 0.6 script:
-#if length(ARGS) < 1
-#    error("missing Language arg, for example: 'tigrinya'")
-#end
+
 
 #lang = "georgian"
 #lang = "tigrinya"
 #lang = "tigrinya"
 lang = "indonesian"
-#lang = ARGS[1]
+
+if !isdefined(:lang) && length(ARGS) < 1
+    error("missing Language arg, for example: 'tigrinya'")
+end
+
+if !isdefined(:lang)
+	lang = ARGS[1]
+end
 
 n_reps = 3
 run_length = 7
@@ -29,7 +34,7 @@ get_sept_str() = joinpath("_","")[end:end]
 sep_str = get_sept_str()
 
 function get_audio_list(d::String)
-    phrases = glob("en_*.mp3", d)
+    all_audio = glob("*.mp3", d)
     sounds = glob("00_*.mp3", d)
     phrases = setdiff( all_audio, sounds)
     return phrases, sounds
@@ -38,7 +43,7 @@ end
 # filenames like "./en_gg_ac_01_03.mp3"
 
 function mk_reps(l)
-	error(length(l) == 0 )
+    @assert length(l) != 0
     s = 1 : step_size : length(l)
 	println("length: $(length(l))")
     ranges = [from:to for (from,to) in zip(s,vcat(s[2:end]-1, length(l)))]
