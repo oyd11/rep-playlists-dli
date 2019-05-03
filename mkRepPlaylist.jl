@@ -29,14 +29,16 @@ get_sept_str() = joinpath("_","")[end:end]
 sep_str = get_sept_str()
 
 function get_audio_list(d::String)
-    phrases = glob("en_*.mp3",d)
-    sounds = glob("00_*.mp3",d)
+    phrases = glob("en_*.mp3", d)
+    sounds = glob("00_*.mp3", d)
+    phrases = setdiff( all_audio, sounds)
     return phrases, sounds
 end
 
 # filenames like "./en_gg_ac_01_03.mp3"
 
 function mk_reps(l)
+	error(length(l) == 0 )
     s = 1 : step_size : length(l)
 	println("length: $(length(l))")
     ranges = [from:to for (from,to) in zip(s,vcat(s[2:end]-1, length(l)))]
@@ -58,6 +60,7 @@ cd(lang) do
         p = splitdir(path_name)[1]
         println(p)
         phrases, sounds = get_audio_list(p)
+	println("# phrases: $(length(phrases))")
         let 
             out_filename = "../$outPlaylistDir/$p.m3u8"
             out_string = join([h1, sounds..., phrases...],"\n")
