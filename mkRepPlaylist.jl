@@ -11,7 +11,7 @@
 #lang = "georgian"
 #lang = "tigrinya"
 #lang = "tigrinya"
-lang = "indonesian"
+#lang = "indonesian"
 
 if !isdefined(:lang) && length(ARGS) < 1
     error("missing Language arg, for example: 'tigrinya'")
